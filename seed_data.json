@@ -1,0 +1,590 @@
+{
+    "data": {
+        "plans": [
+            {
+                "id": "O7rWQ8GpyeD0Zzp",
+                "planName": "Pay as you Go",
+                "planCode": "pay-as-you-go-monthly-v3",
+                "planPrice": "0.00",
+                "anchorPrice": 0,
+                "monthlyPrice": "0.00",
+                "billIntervalUnit": "months",
+                "planCategoryType": 1,
+                "planTransactionFee": "0.00",
+                "planDynamicTexts": {
+                    "textLine1": "No Minimum Spend",
+                    "textLine2": null,
+                    "textLine3": null,
+                    "textLine4": null,
+                    "textLine5": null,
+                    "textLine6": null
+                },
+                "planFeatures": [
+                    {
+                        "featureName": "Bank Account",
+                        "featureCode": "bankaccount-create",
+                        "featureType": 2,
+                        "featureCategoryType": 1,
+                        "planFeatureTransactionFee": 0,
+                        "quantity": 3,
+                        "featureDisplayText": "Bank Accounts",
+                        "featureDynamicTexts": {
+                            "textLine1": "3",
+                            "textLine2": null,
+                            "textLine3": null,
+                            "textLine4": null,
+                            "textLine5": null
+                        }
+                    },
+                    {
+                        "featureName": "Users",
+                        "featureCode": "user-create",
+                        "featureType": 2,
+                        "featureCategoryType": 1,
+                        "planFeatureTransactionFee": 0,
+                        "quantity": 3,
+                        "featureDisplayText": "Users",
+                        "featureDynamicTexts": {
+                            "textLine1": "3",
+                            "textLine2": null,
+                            "textLine3": null,
+                            "textLine4": null,
+                            "textLine5": null
+                        }
+                    },
+                    {
+                        "featureName": "Check Print Txn",
+                        "featureCode": "txn-check-print",
+                        "featureType": 3,
+                        "featureCategoryType": 1,
+                        "planFeatureTransactionFee": "1.00",
+                        "quantity": null,
+                        "featureDisplayText": "Check Print",
+                        "featureDynamicTexts": {
+                            "textLine1": "$1",
+                            "textLine2": null,
+                            "textLine3": null,
+                            "textLine4": null,
+                            "textLine5": null
+                        }
+                    },
+                    {
+                        "featureName": "Email Check Txn",
+                        "featureCode": "txn-check-email",
+                        "featureType": 3,
+                        "featureCategoryType": 1,
+                        "planFeatureTransactionFee": "1.00",
+                        "quantity": null,
+                        "featureDisplayText": "Email Check",
+                        "featureDynamicTexts": {
+                            "textLine1": "$1.00",
+                            "textLine2": null,
+                            "textLine3": null,
+                            "textLine4": null,
+                            "textLine5": null
+                        }
+                    },
+                    {
+                        "featureName": "Check DD txn",
+                        "featureCode": "txn-check-dd",
+                        "featureType": 3,
+                        "featureCategoryType": 1,
+                        "planFeatureTransactionFee": 0,
+                        "quantity": null,
+                        "featureDisplayText": "ACH Payment",
+                        "featureDynamicTexts": {
+                            "textLine1": "1% ,Max $5.00",
+                            "textLine2": null,
+                            "textLine3": null,
+                            "textLine4": null,
+                            "textLine5": null
+                        }
+                    },
+                    {
+                        "featureName": "TXN:ACC->WIRE",
+                        "featureCode": "txn-zilpayment-wire-from-bankaccount",
+                        "featureType": 3,
+                        "featureCategoryType": 1,
+                        "planFeatureTransactionFee": "15.00",
+                        "quantity": null,
+                        "featureDisplayText": "Domestic Wire",
+                        "featureDynamicTexts": {
+                            "textLine1": "$15.00",
+                            "textLine2": null,
+                            "textLine3": null,
+                            "textLine4": null,
+                            "textLine5": null
+                        }
+                    }
+                ],
+                "freeAddonFeatures": [],
+                "freeCredit": 0
+            },
+            {
+                "id": "obQEmZGEmGaw3vN",
+                "planName": "Enterprise Yearly",
+                "planCode": "enterprise-custom-yearly-v2",
+                "planPrice": "9999.99",
+                "anchorPrice": 0,
+                "monthlyPrice": "999.99",
+                "billIntervalUnit": "years",
+                "planCategoryType": 4,
+                "planTransactionFee": "0.49",
+                "planDynamicTexts": {
+                    "textLine1": "Starting $999/month",
+                    "textLine2": null,
+                    "textLine3": null,
+                    "textLine4": null,
+                    "textLine5": null,
+                    "textLine6": "Rates customized for each client"
+                },
+                "planFeatures": [
+                    {
+                        "featureName": "Own Mail Server",
+                        "featureCode": "own-mail-server",
+                        "featureType": 1,
+                        "featureCategoryType": 4,
+                        "planFeatureTransactionFee": 0,
+                        "quantity": null,
+                        "featureDisplayText": "Own Mailing Server",
+                        "featureDynamicTexts": {
+                            "textLine1": null,
+                            "textLine2": null,
+                            "textLine3": null,
+                            "textLine4": null,
+                            "textLine5": null
+                        }
+                    },
+                    {
+                        "featureName": "Customize Email Template",
+                        "featureCode": "custom-email-template",
+                        "featureType": 1,
+                        "featureCategoryType": 4,
+                        "planFeatureTransactionFee": 0,
+                        "quantity": null,
+                        "featureDisplayText": "Custom Email Template Builder",
+                        "featureDynamicTexts": {
+                            "textLine1": null,
+                            "textLine2": null,
+                            "textLine3": null,
+                            "textLine4": null,
+                            "textLine5": null
+                        }
+                    },
+                    {
+                        "featureName": "Dedicated support",
+                        "featureCode": "dedicated-support",
+                        "featureType": 1,
+                        "featureCategoryType": 4,
+                        "planFeatureTransactionFee": 0,
+                        "quantity": null,
+                        "featureDisplayText": "Dedicated Support",
+                        "featureDynamicTexts": {
+                            "textLine1": null,
+                            "textLine2": null,
+                            "textLine3": null,
+                            "textLine4": null,
+                            "textLine5": null
+                        }
+                    },
+                    {
+                        "featureName": "Faster ACH processing",
+                        "featureCode": "faster-ach-processing",
+                        "featureType": 1,
+                        "featureCategoryType": 4,
+                        "planFeatureTransactionFee": 0,
+                        "quantity": null,
+                        "featureDisplayText": "Faster ACH processing",
+                        "featureDynamicTexts": {
+                            "textLine1": null,
+                            "textLine2": null,
+                            "textLine3": null,
+                            "textLine4": null,
+                            "textLine5": null
+                        }
+                    },
+                    {
+                        "featureName": "White Labeling",
+                        "featureCode": "white-labeling",
+                        "featureType": 1,
+                        "featureCategoryType": 4,
+                        "planFeatureTransactionFee": 0,
+                        "quantity": null,
+                        "featureDisplayText": "White Labeling",
+                        "featureDynamicTexts": {
+                            "textLine1": null,
+                            "textLine2": null,
+                            "textLine3": null,
+                            "textLine4": null,
+                            "textLine5": null
+                        }
+                    },
+                    {
+                        "featureName": "User Approval policy",
+                        "featureCode": "user-approval-policy",
+                        "featureType": 1,
+                        "featureCategoryType": 4,
+                        "planFeatureTransactionFee": 0,
+                        "quantity": null,
+                        "featureDisplayText": "User Approval Policy",
+                        "featureDynamicTexts": {
+                            "textLine1": null,
+                            "textLine2": null,
+                            "textLine3": null,
+                            "textLine4": null,
+                            "textLine5": null
+                        }
+                    },
+                    {
+                        "featureName": "Enterprise Security Features",
+                        "featureCode": "enterprise-security-features",
+                        "featureType": 1,
+                        "featureCategoryType": 4,
+                        "planFeatureTransactionFee": 0,
+                        "quantity": null,
+                        "featureDisplayText": "Enterprise Security Features",
+                        "featureDynamicTexts": {
+                            "textLine1": null,
+                            "textLine2": null,
+                            "textLine3": null,
+                            "textLine4": null,
+                            "textLine5": null
+                        }
+                    },
+                    {
+                        "featureName": "Advanced fraud prevention",
+                        "featureCode": "advanced-fraud-prevention",
+                        "featureType": 1,
+                        "featureCategoryType": 4,
+                        "planFeatureTransactionFee": 0,
+                        "quantity": null,
+                        "featureDisplayText": "Advanced Fraud Prevention",
+                        "featureDynamicTexts": {
+                            "textLine1": null,
+                            "textLine2": null,
+                            "textLine3": null,
+                            "textLine4": null,
+                            "textLine5": null
+                        }
+                    },
+                    {
+                        "featureName": "Access to API",
+                        "featureCode": "access-to-api",
+                        "featureType": 1,
+                        "featureCategoryType": 4,
+                        "planFeatureTransactionFee": 0,
+                        "quantity": null,
+                        "featureDisplayText": "Access to API",
+                        "featureDynamicTexts": {
+                            "textLine1": null,
+                            "textLine2": null,
+                            "textLine3": null,
+                            "textLine4": null,
+                            "textLine5": null
+                        }
+                    },
+                    {
+                        "featureName": "Custom Requirements",
+                        "featureCode": "custom-requirements",
+                        "featureType": 1,
+                        "featureCategoryType": 4,
+                        "planFeatureTransactionFee": 0,
+                        "quantity": null,
+                        "featureDisplayText": "Custom Requirements",
+                        "featureDynamicTexts": {
+                            "textLine1": null,
+                            "textLine2": null,
+                            "textLine3": null,
+                            "textLine4": null,
+                            "textLine5": null
+                        }
+                    },
+                    {
+                        "featureName": "All premium Features",
+                        "featureCode": "all-premium-features",
+                        "featureType": 1,
+                        "featureCategoryType": 4,
+                        "planFeatureTransactionFee": 0,
+                        "quantity": null,
+                        "featureDisplayText": "All Premium Features",
+                        "featureDynamicTexts": {
+                            "textLine1": null,
+                            "textLine2": null,
+                            "textLine3": null,
+                            "textLine4": null,
+                            "textLine5": null
+                        }
+                    }
+                ],
+                "freeAddonFeatures": [],
+                "freeCredit": 0
+            }
+        ],
+        "addOns": [
+            {
+                "id": "OMRJ6qGAX4E1rDZ",
+                "addonName": "Bank Account Monthly",
+                "addonCode": "bankaccount-monthly",
+                "addonDisplayText": "Bank account",
+                "price": "8.99",
+                "anchorPrice": null,
+                "monthlyPrice": "8.99",
+                "pricingScheme": "unit",
+                "unitName": "No",
+                "addonType": "recurring",
+                "intervalUnit": "monthly",
+                "description": "Add multiple bank accounts to utilize across all features .",
+                "detailedDescription": "Add more Bank accounts and use it for all the features",
+                "addonQuantityType": 2,
+                "addonCategoryType": 1,
+                "featureCode": "bankaccount-create",
+                "addonDynamicTexts": {
+                    "textLine1": null,
+                    "textLine2": null
+                }
+            },
+            {
+                "id": "y0bL3YGdLG1X7wA",
+                "addonName": "Bank Account Yearly",
+                "addonCode": "bankaccount-yearly",
+                "addonDisplayText": "Bank Account",
+                "price": "107.88",
+                "anchorPrice": null,
+                "monthlyPrice": "8.99",
+                "pricingScheme": "unit",
+                "unitName": "No",
+                "addonType": "recurring",
+                "intervalUnit": "yearly",
+                "description": "Add multiple bank accounts to utilize across all features .",
+                "detailedDescription": "Add more Bank accounts and use it for all the features",
+                "addonQuantityType": 2,
+                "addonCategoryType": 1,
+                "featureCode": "bankaccount-create",
+                "addonDynamicTexts": {
+                    "textLine1": null,
+                    "textLine2": null
+                }
+            },
+            {
+                "id": "qx5NrWjymj2n3l6",
+                "addonName": "User Monthly",
+                "addonCode": "user-create-monthly",
+                "addonDisplayText": "User",
+                "price": "8.99",
+                "anchorPrice": null,
+                "monthlyPrice": "8.99",
+                "pricingScheme": "unit",
+                "unitName": "No",
+                "addonType": "recurring",
+                "intervalUnit": "monthly",
+                "description": "Add more users to manage your account.",
+                "detailedDescription": "Add more user to manage your OnlineCheckWriter account",
+                "addonQuantityType": 2,
+                "addonCategoryType": 1,
+                "featureCode": "user-create",
+                "addonDynamicTexts": {
+                    "textLine1": null,
+                    "textLine2": null
+                }
+            },
+            {
+                "id": "rz6VoW41dj589lK",
+                "addonName": "User Yearly",
+                "addonCode": "user-create-yearly",
+                "addonDisplayText": "User",
+                "price": "107.88",
+                "anchorPrice": null,
+                "monthlyPrice": "8.99",
+                "pricingScheme": "unit",
+                "unitName": "No",
+                "addonType": "recurring",
+                "intervalUnit": "yearly",
+                "description": "Add more users to manage your account.",
+                "detailedDescription": "Add more user to manage your OnlineCheckWriter account",
+                "addonQuantityType": 2,
+                "addonCategoryType": 1,
+                "featureCode": "user-create",
+                "addonDynamicTexts": {
+                    "textLine1": null,
+                    "textLine2": null
+                }
+            },
+            {
+                "id": "knv1byeV2eOQgrB",
+                "addonName": "Bank Data - Yearly",
+                "addonCode": "bankdata-yearly-v2",
+                "addonDisplayText": "Bank Data",
+                "price": "82.80",
+                "anchorPrice": null,
+                "monthlyPrice": "6.99",
+                "pricingScheme": "unit",
+                "unitName": "No",
+                "addonType": "recurring",
+                "intervalUnit": "yearly",
+                "description": "Track all your bank data in one place and manage it easily.",
+                "detailedDescription": "Track all your bank data in one place. Manage them easily.",
+                "addonQuantityType": 1,
+                "addonCategoryType": 1,
+                "featureCode": "bankdata",
+                "addonDynamicTexts": {
+                    "textLine1": null,
+                    "textLine2": null
+                }
+            },
+            {
+                "id": "pyEMKgGNPjwvnQ8",
+                "addonName": "Positive Pay",
+                "addonCode": "positivepay-yearly-v2",
+                "addonDisplayText": "Positive Pay",
+                "price": "2299.99",
+                "anchorPrice": null,
+                "monthlyPrice": "191.66",
+                "pricingScheme": "unit",
+                "unitName": "No",
+                "addonType": "recurring",
+                "intervalUnit": "yearly",
+                "description": "Automated system to eliminate check fraud.",
+                "detailedDescription": "Automated cash management system to eliminate check fraud.",
+                "addonQuantityType": 2,
+                "addonCategoryType": 1,
+                "featureCode": "positive-pay",
+                "addonDynamicTexts": {
+                    "textLine1": null,
+                    "textLine2": null
+                }
+            },
+            {
+                "id": "6azRNXG0qeLxyBb",
+                "addonName": "API -Yearly",
+                "addonCode": "api-yearly-v2",
+                "addonDisplayText": "API",
+                "price": "1199.88",
+                "anchorPrice": null,
+                "monthlyPrice": "99.99",
+                "pricingScheme": "unit",
+                "unitName": "No",
+                "addonType": "recurring",
+                "intervalUnit": "yearly",
+                "description": "Integrate Zil Money features with your own application.",
+                "detailedDescription": "Integrate Online Check Writer with your own application.",
+                "addonQuantityType": 1,
+                "addonCategoryType": 1,
+                "featureCode": null,
+                "addonDynamicTexts": {
+                    "textLine1": null,
+                    "textLine2": null
+                }
+            },
+            {
+                "id": "2dLRko4zV4bY7yA",
+                "addonName": "Bank Data - Monthly",
+                "addonCode": "bankdata-monthly-v2",
+                "addonDisplayText": "Bank Data",
+                "price": "6.99",
+                "anchorPrice": null,
+                "monthlyPrice": "6.99",
+                "pricingScheme": "unit",
+                "unitName": "No",
+                "addonType": "recurring",
+                "intervalUnit": "monthly",
+                "description": "Track all your bank data in one place and manage it easily.",
+                "detailedDescription": "Track all your bank data in one place. Manage them easily.",
+                "addonQuantityType": 1,
+                "addonCategoryType": 1,
+                "featureCode": "bankdata",
+                "addonDynamicTexts": {
+                    "textLine1": null,
+                    "textLine2": null
+                }
+            },
+            {
+                "id": "gJB1y3GLbjpX8z6",
+                "addonName": "Positive Pay - Monthly",
+                "addonCode": "positivepay-monthly-v2",
+                "addonDisplayText": "Positive Pay",
+                "price": "199.99",
+                "anchorPrice": null,
+                "monthlyPrice": "199.99",
+                "pricingScheme": "unit",
+                "unitName": "No",
+                "addonType": "recurring",
+                "intervalUnit": "monthly",
+                "description": "Automated system to eliminate check fraud.",
+                "detailedDescription": "Automated cash management system to eliminate check fraud.",
+                "addonQuantityType": 2,
+                "addonCategoryType": 1,
+                "featureCode": "positive-pay",
+                "addonDynamicTexts": {
+                    "textLine1": null,
+                    "textLine2": null
+                }
+            },
+            {
+                "id": "xQkY2VjXRGNEmJ7",
+                "addonName": "API -Monthly",
+                "addonCode": "api-monthly-v2",
+                "addonDisplayText": "API",
+                "price": "99.99",
+                "anchorPrice": null,
+                "monthlyPrice": "99.99",
+                "pricingScheme": "unit",
+                "unitName": "No",
+                "addonType": "recurring",
+                "intervalUnit": "monthly",
+                "description": "Integrate Zil Money features with your own application.",
+                "detailedDescription": "Integrate Online Check Writer with your own application.",
+                "addonQuantityType": 1,
+                "addonCategoryType": 1,
+                "featureCode": null,
+                "addonDynamicTexts": {
+                    "textLine1": null,
+                    "textLine2": null
+                }
+            },
+            {
+                "id": "byd7ON4o9eng5o0",
+                "addonName": "Manual ACH (M)",
+                "addonCode": "manual-ach-monthly-v2",
+                "addonDisplayText": "Manual ACH",
+                "price": "99.99",
+                "anchorPrice": null,
+                "monthlyPrice": "99.99",
+                "pricingScheme": "unit",
+                "unitName": "No",
+                "addonType": "recurring",
+                "intervalUnit": "monthly",
+                "description": "Enables you to collect money from payors via ACH/direct deposit.",
+                "detailedDescription": "Enables you to collect money from payer and do ACH/direct deposit to your bank account.",
+                "addonQuantityType": 1,
+                "addonCategoryType": 1,
+                "featureCode": null,
+                "addonDynamicTexts": {
+                    "textLine1": null,
+                    "textLine2": null
+                }
+            },
+            {
+                "id": "a903wmjYDe71bkv",
+                "addonName": "Manual ACH (Y)",
+                "addonCode": "manual-ach-yearly-v2",
+                "addonDisplayText": "Manual ACH",
+                "price": "1199.88",
+                "anchorPrice": null,
+                "monthlyPrice": "99.99",
+                "pricingScheme": "unit",
+                "unitName": "No",
+                "addonType": "recurring",
+                "intervalUnit": "yearly",
+                "description": "Enables you to collect money from payors via ACH/direct deposit.",
+                "detailedDescription": "Enables you to collect money from payer and do ACH/direct deposit to your bank account.",
+                "addonQuantityType": 1,
+                "addonCategoryType": 1,
+                "featureCode": null,
+                "addonDynamicTexts": {
+                    "textLine1": null,
+                    "textLine2": null
+                }
+            }
+        ]
+    }
+}
