@@ -17,7 +17,7 @@ async function bootstrap() {
   // 🔥 Global API Prefix
   app.setGlobalPrefix('api');
 
-  // 🔥 GLOBAL VALIDATION (Custom Error Format)
+  // 🔥 GLOBAL VALIDATION
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -41,34 +41,17 @@ async function bootstrap() {
   );
 
   // ====================================================
-  // 🔥 CORS WHITELIST CONFIG
+  // 🔥 SIMPLE & FIXED CORS CONFIG
   // ====================================================
 
-  const allowedOrigins = process.env.ALLOWED_ORIGINS
-    ? process.env.ALLOWED_ORIGINS.split(',')
-    : [];
-
   app.enableCors({
-    origin: (origin, callback) => {
-      // Allow Postman / server-to-server requests
-      if (!origin) {
-        return callback(null, true);
-      }
-
-      // Allow only whitelisted domains
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-
-      // Block others
-      return callback(new Error('Not allowed by CORS'));
-    },
+    origin: 'http://187.77.187.89',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
-  // 🔥 Static Folder (Logo Access)
+  // 🔥 Static Folder
   app.useStaticAssets(join(process.cwd(), 'uploads'), {
     prefix: '/uploads/',
   });
@@ -100,7 +83,7 @@ async function bootstrap() {
 
   await app.listen(port);
 
-  console.log(`🚀 Server running on port ${port}`);
+  console.log(`🚀 Server running on http://187.77.187.89:${port}`);
 }
 
 bootstrap();
