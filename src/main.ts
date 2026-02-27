@@ -26,8 +26,6 @@ async function bootstrap() {
       transformOptions: {
         enableImplicitConversion: true,
       },
-
-      // ✅ Custom error format (NO ARRAY)
       exceptionFactory: (errors) => {
         const firstError = errors[0];
         const message = firstError?.constraints
@@ -42,10 +40,32 @@ async function bootstrap() {
     }),
   );
 
-  // 🔥 Enable CORS
+  // ====================================================
+  // 🔥 CORS WHITELIST CONFIG
+  // ====================================================
+
+  const allowedOrigins = process.env.ALLOWED_ORIGINS
+    ? process.env.ALLOWED_ORIGINS.split(',')
+    : [];
+
   app.enableCors({
-    origin: true,
+    origin: (origin, callback) => {
+      // Allow Postman / server-to-server requests
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      // Allow only whitelisted domains
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      // Block others
+      return callback(new Error('Not allowed by CORS'));
+    },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
   // 🔥 Static Folder (Logo Access)
@@ -80,7 +100,7 @@ async function bootstrap() {
 
   await app.listen(port);
 
-  console.log(` Server running on http://localhost:${port}`);
+  console.log(`🚀 Server running on port ${port}`);
 }
 
 bootstrap();
