@@ -1,9 +1,4 @@
-import {
-  Injectable,
-  BadRequestException,
-  NotFoundException,
-} from '@nestjs/common';
-
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 
@@ -17,26 +12,28 @@ import { VerifyRequestCompanyOtpDto } from './dto/verify-request-company-otp.dto
 
 import * as nodemailer from 'nodemailer';
 
+import { throwException } from 'src/util/util/errorhandling';
+import CustomError from 'src/provider/customer-error.service';
+import CustomResponse from 'src/provider/custom-response.service';
+
 @Injectable()
 export class RequestCompanyService {
 
   constructor(
     @InjectModel(RequestCompany.name)
     private requestCompanyModel: Model<RequestCompanyDocument>,
-  ) {}
+  ) { }
 
-  // OTP GENERATOR
   generateOtp(): string {
     return Math.floor(100000 + Math.random() * 900000).toString();
   }
 
-  // SEND OTP EMAIL
   async sendOtpEmail(email: string, otp: string) {
 
     const transporter = nodemailer.createTransport({
-      host: process.env.MAIL_HOST || 'smtp.gmail.com',
-      port: Number(process.env.MAIL_PORT) || 587,
-      secure: false, // IMPORTANT (587 port ke liye false)
+      host: process.env.MAIL_HOST,
+      port: Number(process.env.MAIL_PORT),
+      secure: false,
       auth: {
         user: process.env.MAIL_USER,
         pass: process.env.MAIL_PASS,
@@ -44,64 +41,84 @@ export class RequestCompanyService {
     });
 
     await transporter.sendMail({
-      from: `"Seamless Checkout" <${process.env.MAIL_USER}>`,
+      from: `"Company Verification" <${process.env.MAIL_USER}>`,
       to: email,
       subject: 'OTP Verification',
       html: `
-        <div style="font-family:Arial;padding:20px">
-          <h2>OTP Verification</h2>
-          <p>Your OTP for company request verification is:</p>
-          <h1 style="color:#2e86de">${otp}</h1>
-          <p>This OTP is valid for verification.</p>
-        </div>
+      <h2>Your OTP Code</h2>
+      <h1>${otp}</h1>
       `,
     });
   }
 
-  // CREATE REQUEST
-  async create(dto: CreateRequestCompanyDto, userId: string, userEmail: string) {
+  async create(
+    dto: CreateRequestCompanyDto,
+    userId: string,
+    userEmail: string,
+  ): Promise<CustomResponse> {
 
-    if (dto.YourEmployerEmail !== dto.ConfirmYourEmployerEmail) {
-      throw new BadRequestException('Email not match');
+    try {
+
+      if (!userId) {
+        throw new CustomError(401, 'User context missing. Please relogin.');
+      }
+
+      if (dto.YourEmployerEmail !== dto.ConfirmYourEmployerEmail) {
+        throw new CustomError(400, 'Emails do not match');
+      }
+
+      const otp = this.generateOtp();
+
+      const request = await this.requestCompanyModel.create({
+        ...dto,
+        userId: new Types.ObjectId(userId),
+        otp,
+      });
+
+      await this.sendOtpEmail(userEmail, otp);
+
+      return new CustomResponse(
+        201,
+        'OTP sent to your registered email',
+        {
+          requestId: request._id,
+        },
+      );
+
+    } catch (error) {
+      throwException(error);
+      throw error;
     }
-
-    const otp = this.generateOtp();
-
-    const request = await this.requestCompanyModel.create({
-      ...dto,
-      userId: new Types.ObjectId(userId),
-      otp,
-    });
-
-    // SEND OTP REGISTERED EMAIL
-    await this.sendOtpEmail(userEmail, otp);
-
-    return {
-      message: 'OTP sent to your registered email',
-      requestId: request._id,
-    };
   }
 
-  // VERIFY OTP
-  async verifyOtp(dto: VerifyRequestCompanyOtpDto) {
+  async verifyOtp(dto: VerifyRequestCompanyOtpDto): Promise<CustomResponse> {
 
-    const request = await this.requestCompanyModel.findById(dto.requestId);
+    try {
 
-    if (!request) {
-      throw new NotFoundException('Request not found');
+      const request = await this.requestCompanyModel.findById(dto.requestId);
+
+      if (!request) {
+        throw new CustomError(404, 'Request not found');
+      }
+
+      if (request.otp !== dto.otp) {
+        throw new CustomError(400, 'Invalid OTP');
+      }
+
+      request.isVerified = true;
+      request.otp = '';
+
+      await request.save();
+
+      return new CustomResponse(
+        200,
+        'Company created successfully',
+        request,
+      );
+
+    } catch (error) {
+      throwException(error);
+      throw error;
     }
-
-    if (request.otp !== dto.otp) {
-      throw new BadRequestException('Invalid OTP');
-    }
-
-    request.isVerified = true;
-    request.otp = '';
-
-    await request.save();
-
-    return {
-      message: 'Requested company created successfully',
-    };
   }
 }

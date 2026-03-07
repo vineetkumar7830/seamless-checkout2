@@ -9,27 +9,27 @@ export class RequestCompany {
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   userId: Types.ObjectId;
 
-  @Prop({ type: String, required: true })
+  @Prop({ required: true })
   YourEmployerEmail: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ required: true })
   ConfirmYourEmployerEmail: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ required: true })
   YourEmployerName: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ required: true })
   YourEmployerNickName: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ required: true })
   RequestedCompanyName: string;
 
-  // ✅ FIXED OTP FIELD
-  @Prop({ type: String, default: '' })
+  @Prop({ default: '' })
   otp: string;
 
-  @Prop({ type: Boolean, default: false })
+  @Prop({ default: false })
   isVerified: boolean;
+
 }
 
 export const RequestCompanySchema =

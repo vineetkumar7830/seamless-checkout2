@@ -187,8 +187,17 @@ export class AuthService {
         status: 'SUCCESS',
       });
 
+      // Send the OTP via email
+      await this.transporter.sendMail({
+        from: this.configService.get<string>('MAIL_USER'),
+        to: user.email,
+        subject: 'Your Login OTP',
+        html: `<p>Your OTP for login is <strong>${otp}</strong>. It expires in 10 minutes.</p>`,
+      });
+
       return new CustomResponse(200, 'OTP sent to your email', {
         email: user.email,
+        // TODO: Remove this in production for security
         otp, // dev/testing only
       });
     } catch (error) {

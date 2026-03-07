@@ -1,13 +1,17 @@
+import * as dotenv from 'dotenv';
+import { resolve } from 'path';
+
+// Load .env before anything else (NestJS modules must see env vars)
+dotenv.config({ path: resolve(process.cwd(), '.env') });
+
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe, BadRequestException } from '@nestjs/common';
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import * as dotenv from 'dotenv';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
-  dotenv.config();
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 

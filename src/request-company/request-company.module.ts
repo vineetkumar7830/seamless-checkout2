@@ -18,4 +18,4 @@ import { RequestCompanyService } from './request-company.service';
   controllers: [RequestCompanyController],
   providers: [RequestCompanyService],
 })
-export class RequestCompanyModule {}
+export class RequestCompanyModule { }
