@@ -83,7 +83,7 @@ async function bootstrap() {
 
   await app.listen(port);
 
-  console.log(`🚀 Server running on http://187.77.187.89:${port}`);
+  console.log(` Server running on http://187.77.187.89:${port}`);
 }
 
 bootstrap();

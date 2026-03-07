@@ -56,6 +56,9 @@ import { TaxModule } from './tax/tax.module';
 import { MultipleCheckModule } from './multiple-check/multiple-check.module';
 import { BulkPayModule } from './bulk-pay/bulk-pay.module';
 import { AddNewBankAccountModule } from './add-new-bank-account/add-new-bank-account.module';
+import { CompanyManagementModule } from './company-management/company-management.module';
+import { AddcompanyModule } from './addcompany/addcompany.module';
+import { RequestCompanyModule } from './request-company/request-company.module';
 
 @Module({
   imports: [
@@ -121,7 +124,10 @@ import { AddNewBankAccountModule } from './add-new-bank-account/add-new-bank-acc
     TaxModule,
     MultipleCheckModule,
     BulkPayModule,
-    AddNewBankAccountModule
+    AddNewBankAccountModule,
+    CompanyManagementModule,
+    AddcompanyModule,
+    RequestCompanyModule
   ],
 
   controllers: [AppController],
