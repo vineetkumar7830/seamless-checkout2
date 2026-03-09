@@ -12,8 +12,9 @@ export class Company {
   @Prop()
   logo: string;
 
-@Prop({ required: true })
-companyName: string;
+  @Prop({ required: true })
+  companyName: string;
+
   @Prop()
   addressLine1: string;
 

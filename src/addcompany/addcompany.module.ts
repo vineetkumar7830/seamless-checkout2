@@ -4,18 +4,18 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AddCompanyController } from './addcompany.controller';
 import { AddCompanyService } from './addcompany.service';
 
-import { AddCompany, AddCompanySchema } from './entities/addcompany.entity';
+import { Company, CompanySchema } from '../company-management/entities/company-management.entity';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       {
-        name: AddCompany.name,
-        schema: AddCompanySchema,
+        name: Company.name,
+        schema: CompanySchema,
       },
     ]),
   ],
   controllers: [AddCompanyController],
   providers: [AddCompanyService],
 })
-export class AddcompanyModule {}
+export class AddcompanyModule { }

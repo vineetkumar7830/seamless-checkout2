@@ -7,10 +7,11 @@ export type UserProfileDocument = UserProfile & Document;
 export class UserProfile {
 
   @Prop({ required: true })
-  companyId: string; // SaaS company / workspace
+  userId: string;
 
-  @Prop({ required: true })
-  userId: string; // from token
+  // company dropdown value
+  @Prop()
+  company: string;
 
   @Prop({ required: true })
   firstName: string;
@@ -26,6 +27,10 @@ export class UserProfile {
 
   @Prop()
   phone: string;
+
+  // profile image
+  @Prop()
+  logo: string;
 
   @Prop()
   ssn: string;

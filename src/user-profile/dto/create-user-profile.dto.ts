@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsString, IsOptional, IsNotEmpty } from 'class-validator';
 
 export class CreateUserProfileDto {
 
@@ -14,6 +14,9 @@ export class CreateUserProfileDto {
 
   @IsOptional()
   phone: string;
+
+  @IsOptional()
+  logo: string;
 
   @IsOptional()
   ssn: string;

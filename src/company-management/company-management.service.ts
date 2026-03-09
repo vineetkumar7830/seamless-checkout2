@@ -3,7 +3,9 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 
 import { Company, CompanyDocument } from './entities/company-management.entity';
-import { UpdateCompanyDto } from './dto/update-company-management.dto';
+import { UpdateCompanyManagementDto
+
+ } from './dto/update-company-management.dto';
 import { CreateCompanyDto } from './dto/create-company-management.dto';
 
 @Injectable()
@@ -14,7 +16,7 @@ export class CompanyManagementService {
     private companyModel: Model<CompanyDocument>,
   ) {}
 
-  // ⭐ CREATE COMPANY (EDITED)
+  // CREATE COMPANY
   async create(userId: string, dto: CreateCompanyDto) {
 
     const company = new this.companyModel({
@@ -37,7 +39,7 @@ export class CompanyManagementService {
   async findOne(companyId: string, userId: string) {
 
     const company = await this.companyModel.findOne({
-      _id: companyId,
+      _id: new Types.ObjectId(companyId),
       userId: new Types.ObjectId(userId),
     });
 
@@ -48,38 +50,33 @@ export class CompanyManagementService {
     return company;
   }
 
-  // UPDATE COMPANY + LOGO
-  async update(companyId: string, userId: string, dto: UpdateCompanyDto, logo?: string) {
+  // UPDATE COMPANY
+  async update(companyId: string, userId: string, dto: UpdateCompanyManagementDto) {
 
-    const updateData: any = {
-      ...dto,
-    };
-
-    if (logo) {
-      updateData.logo = logo;
-    }
-
-    const company = await this.companyModel.findOneAndUpdate(
-      {
-        _id: companyId,
-        userId: new Types.ObjectId(userId),
-      },
-      updateData,
-      { new: true },
-    );
+    const company = await this.companyModel.findOne({
+      _id: new Types.ObjectId(companyId),
+      userId: new Types.ObjectId(userId),
+    });
 
     if (!company) {
       throw new NotFoundException('Company not found');
     }
 
-    return company;
+    Object.assign(company, dto);
+
+    await company.save();
+
+    return {
+      message: 'Company updated successfully',
+      data: company,
+    };
   }
 
   // DELETE COMPANY
   async remove(companyId: string, userId: string) {
 
     return this.companyModel.findOneAndDelete({
-      _id: companyId,
+      _id: new Types.ObjectId(companyId),
       userId: new Types.ObjectId(userId),
     });
   }

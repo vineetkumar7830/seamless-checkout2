@@ -1,59 +1,81 @@
 import {
   Controller,
-  Post,
-  Body,
   Get,
   Put,
-  Req,
+  Body,
   UseGuards,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
-import type { Request } from 'express';
+
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 
 import { UserProfileService } from './user-profile.service';
-import { CreateUserProfileDto } from './dto/create-user-profile.dto';
 import { UpdateUserProfileDto } from './dto/update-user-profile.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
+
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
 
-@Controller('api/profile')
-@UseGuards(JwtAuthGuard) // 🔐 token required
+@Controller('profile')
+@UseGuards(JwtAuthGuard)
 export class UserProfileController {
-  constructor(private readonly service: UserProfileService) { }
 
-  // ✅ CREATE PROFILE (after register)
-  @Post()
-  create(
-    @GetUser('userId') userId: string,
-    @GetUser('companyId') companyId: string,
-    @GetUser('email') email: string,
-    @Body() dto: CreateUserProfileDto,
-  ) {
-    return this.service.create({
-      ...dto,
-      userId,
-      companyId,
-      email,
-    });
-  }
+  constructor(private readonly service: UserProfileService) {}
 
+  // GET PROFILE
   @Get('me')
   getMyProfile(
     @GetUser('userId') userId: string,
-    @GetUser('companyId') companyId: string,
+    @GetUser('email') email: string,
+    @GetUser('firstName') firstName: string,
   ) {
-    return this.service.findByUserAndCompany(userId, companyId);
+    return this.service.findByUser(userId, email, firstName);
   }
 
+  // UPDATE PROFILE
   @Put('me')
+  @UseInterceptors(
+    FileInterceptor('logo', {
+      storage: diskStorage({
+        destination: './uploads/profile',
+        filename: (req, file, callback) => {
+          const uniqueName =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+
+          callback(null, uniqueName + extname(file.originalname));
+        },
+      }),
+    }),
+  )
   updateMyProfile(
     @GetUser('userId') userId: string,
-    @GetUser('companyId') companyId: string,
+    @GetUser('email') email: string,
+    @GetUser('firstName') firstName: string,
+    @UploadedFile() file: Express.Multer.File,
     @Body() dto: UpdateUserProfileDto,
   ) {
-    return this.service.updateByUserAndCompany(
+
+    if (file) {
+      dto.logo = `uploads/profile/${file.filename}`;
+    }
+
+    return this.service.updateByUser(
       userId,
-      companyId,
+      email,
+      firstName,
       dto,
     );
+  }
+
+  // CHANGE PASSWORD
+  @Put('change-password')
+  changePassword(
+    @GetUser('userId') userId: string,
+    @Body() dto: ChangePasswordDto,
+  ) {
+    return this.service.changePassword(userId, dto);
   }
 }
