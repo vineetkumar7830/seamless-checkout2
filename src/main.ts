@@ -33,7 +33,7 @@ async function bootstrap() {
     ],
     credentials: true,
     methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
-    allowedHeaders: ['Content-Type','Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-company-id'],
   });
 
   // 🔥 GLOBAL VALIDATION
@@ -91,7 +91,7 @@ async function bootstrap() {
 
   await app.listen(port);
 
-  console.log(`🚀 Server running on http://187.77.187.89:${port}`);
+  console.log(`🚀 Server running on http://localhost:${port}`);
 }
 
 bootstrap();

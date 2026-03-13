@@ -52,4 +52,14 @@ export class CreateCompanyDto {
     message: 'Invalid ZIP / Postal Code for USA or Canada',
   })
   zipCode: string;
+
+  @ApiProperty({ example: 'http://example.com/logo.png', required: false })
+  @IsOptional()
+  @IsString()
+  logoUrl?: string;
+
+  @ApiProperty({ example: 'http://example.com/signature.png', required: false })
+  @IsOptional()
+  @IsString()
+  signatureUrl?: string;
 }

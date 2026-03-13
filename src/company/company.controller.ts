@@ -112,13 +112,58 @@ export class CompanyController {
 
   // ================= UPDATE =================
   @ApiOperation({ summary: 'Update company details' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        logo: { type: 'string', format: 'binary' },
+        signature: { type: 'string', format: 'binary' },
+        name: { type: 'string' },
+        email: { type: 'string' },
+        phone: { type: 'string' },
+        website: { type: 'string' },
+        country: { type: 'string', enum: ['USA', 'CANADA'] },
+        state: { type: 'string' },
+        city: { type: 'string' },
+        addressLine1: { type: 'string' },
+        addressLine2: { type: 'string' },
+        zipCode: { type: 'string' },
+      },
+    },
+  })
   @Put(':id')
+  @UseInterceptors(
+    FileFieldsInterceptor(
+      [
+        { name: 'logo', maxCount: 1 },
+        { name: 'signature', maxCount: 1 },
+      ],
+      {
+        storage: diskStorage({
+          destination: join(process.cwd(), 'uploads/company'),
+
+          filename: (req, file, cb) => {
+            const uniqueName =
+              Date.now() + '-' + Math.round(Math.random() * 1e9);
+
+            cb(null, uniqueName + extname(file.originalname));
+          },
+        }),
+      },
+    ),
+  )
   update(
     @Param('id') id: string,
+    @UploadedFiles()
+    files: {
+      logo?: Express.Multer.File[];
+      signature?: Express.Multer.File[];
+    },
     @Body() dto: UpdateCompanyDto,
     @GetUser('userId') userId: string,
   ) {
-    return this.companyService.update(id, dto, userId);
+    return this.companyService.update(id, dto, files, userId);
   }
 
   // ================= DELETE =================

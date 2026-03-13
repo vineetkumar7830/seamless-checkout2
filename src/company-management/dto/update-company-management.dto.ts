@@ -53,4 +53,12 @@ export class UpdateCompanyManagementDto {
   @IsOptional()
   @IsString()
   ein?: string;
+
+  @IsOptional()
+  @IsString()
+  logoUrl?: string;
+
+  @IsOptional()
+  @IsString()
+  signatureUrl?: string;
 }

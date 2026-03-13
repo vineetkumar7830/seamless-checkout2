@@ -48,4 +48,12 @@ export class CreateCompanyDto {
   @IsOptional()
   @IsString()
   ein?: string;
+
+  @IsOptional()
+  @IsString()
+  logoUrl?: string;
+
+  @IsOptional()
+  @IsString()
+  signatureUrl?: string;
 }

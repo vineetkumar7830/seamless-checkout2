@@ -118,11 +118,33 @@ export class CompanyService {
   }
 
   // ================= UPDATE =================
-  async update(id: string, dto: UpdateCompanyDto, userId: string) {
+  async update(
+    id: string,
+    dto: UpdateCompanyDto,
+    files: {
+      logo?: Express.Multer.File[];
+      signature?: Express.Multer.File[];
+    },
+    userId: string,
+  ) {
     try {
+      // ✅ Base URL
+      const baseUrl = process.env.BASE_URL || 'http://localhost:9000';
+
+      const updateData: any = { ...dto };
+
+      // ✅ Update URLs if files are uploaded
+      if (files?.logo?.[0]) {
+        updateData.logoUrl = `${baseUrl}/uploads/company/${files.logo[0].filename}`;
+      }
+
+      if (files?.signature?.[0]) {
+        updateData.signatureUrl = `${baseUrl}/uploads/company/${files.signature[0].filename}`;
+      }
+
       const company = await this.companyModel.findOneAndUpdate(
         { _id: id, userId },
-        dto,
+        updateData,
         { new: true },
       );
 
