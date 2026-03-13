@@ -13,6 +13,7 @@ import { throwException } from '../util/util/errorhandling';
 import CustomError from 'src/provider/customer-error.service';
 import CustomResponse from 'src/provider/custom-response.service';
 import { AuthService } from '../auth/auth.service';
+
 @Injectable()
 export class CompanyService {
   constructor(
@@ -44,8 +45,17 @@ export class CompanyService {
       const exists = await this.companyModel.findOne({ email: dto.email });
       if (exists) throw new CustomError(400, 'Company already exists');
 
-      const logoUrl = files?.logo?.[0]?.filename;
-      const signatureUrl = files?.signature?.[0]?.filename;
+      // ✅ Base URL
+      const baseUrl = process.env.BASE_URL || 'http://localhost:9000';
+
+      // ✅ Full Image URL
+      const logoUrl = files?.logo?.[0]
+        ? `${baseUrl}/uploads/company/${files.logo[0].filename}`
+        : null;
+
+      const signatureUrl = files?.signature?.[0]
+        ? `${baseUrl}/uploads/company/${files.signature[0].filename}`
+        : null;
 
       const newCompany = new this.companyModel({
         ...dto,
@@ -73,7 +83,7 @@ export class CompanyService {
     }
   }
 
-  // ================= GET ALL (ONLY USER COMPANIES) =================
+  // ================= GET ALL =================
   async findAll(userId: string) {
     try {
       const companies = await this.companyModel.find({
@@ -91,7 +101,7 @@ export class CompanyService {
     }
   }
 
-  // ================= GET ONE (SECURE) =================
+  // ================= GET ONE =================
   async findOne(id: string, userId: string) {
     try {
       const company = await this.companyModel.findOne({
@@ -107,7 +117,7 @@ export class CompanyService {
     }
   }
 
-  // ================= UPDATE (SECURE) =================
+  // ================= UPDATE =================
   async update(id: string, dto: UpdateCompanyDto, userId: string) {
     try {
       const company = await this.companyModel.findOneAndUpdate(
@@ -124,7 +134,7 @@ export class CompanyService {
     }
   }
 
-  // ================= DELETE (SECURE) =================
+  // ================= DELETE =================
   async remove(id: string, userId: string) {
     try {
       const company = await this.companyModel.findOneAndUpdate(

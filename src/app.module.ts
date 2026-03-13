@@ -59,6 +59,9 @@ import { AddNewBankAccountModule } from './add-new-bank-account/add-new-bank-acc
 import { CompanyManagementModule } from './company-management/company-management.module';
 import { AddcompanyModule } from './addcompany/addcompany.module';
 import { RequestCompanyModule } from './request-company/request-company.module';
+import { BlankChecksModule } from './blank-checks/blank-checks.module';
+import { AddNewBankModule } from './add-new-bank/add-new-bank.module';
+import { NewPaymentModule } from './new-payment/new-payment.module';
 
 @Module({
   imports: [
@@ -127,7 +130,10 @@ import { RequestCompanyModule } from './request-company/request-company.module';
     AddNewBankAccountModule,
     CompanyManagementModule,
     AddcompanyModule,
-    RequestCompanyModule
+    RequestCompanyModule,
+    BlankChecksModule,
+    AddNewBankModule,
+    NewPaymentModule
   ],
 
   controllers: [AppController],

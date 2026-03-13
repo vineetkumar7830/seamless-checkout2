@@ -59,7 +59,7 @@ async function bootstrap() {
     }),
   );
 
-  // 🔥 Static Folder
+  // 🔥 Static Folder (PRODUCTION SAFE)
   app.useStaticAssets(join(process.cwd(), 'uploads'), {
     prefix: '/uploads/',
   });

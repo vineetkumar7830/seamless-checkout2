@@ -10,11 +10,17 @@ import {
   UploadedFiles,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiConsumes, ApiBody } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiBody,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { extname } from 'path';
+import { extname, join } from 'path';
 import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
@@ -25,7 +31,7 @@ import { GetUser } from 'src/auth/decorators/get-user.decorator';
 @Controller('company')
 @UseGuards(JwtAuthGuard)
 export class CompanyController {
-  constructor(private readonly companyService: CompanyService) { }
+  constructor(private readonly companyService: CompanyService) {}
 
   // ================= CREATE COMPANY =================
   @ApiOperation({ summary: 'Create a new company with logo and signature' })
@@ -58,10 +64,13 @@ export class CompanyController {
       ],
       {
         storage: diskStorage({
-          destination: './uploads/company',
+          // ✅ FIXED PATH (Production Safe)
+          destination: join(process.cwd(), 'uploads/company'),
+
           filename: (req, file, cb) => {
             const uniqueName =
               Date.now() + '-' + Math.round(Math.random() * 1e9);
+
             cb(null, uniqueName + extname(file.originalname));
           },
         }),
@@ -80,7 +89,7 @@ export class CompanyController {
     return this.companyService.create(dto, files, userId);
   }
 
-  // ================= GET ALL (FILTERED BY TOKEN USER) =================
+  // ================= GET ALL =================
   @ApiOperation({ summary: 'Get all companies for the current user' })
   @Get()
   findAll(@GetUser('userId') userId: string) {
@@ -88,7 +97,7 @@ export class CompanyController {
   }
 
   // ================= GET ACTIVE COMPANY =================
-  @ApiOperation({ summary: 'Get the user\'s currently active company' })
+  @ApiOperation({ summary: "Get the user's currently active company" })
   @Get('active')
   getActiveCompany(@GetUser('companyId') companyId: string) {
     return this.companyService.getActiveCompany(companyId);
@@ -97,10 +106,7 @@ export class CompanyController {
   // ================= GET ONE =================
   @ApiOperation({ summary: 'Get a specific company by ID' })
   @Get(':id')
-  findOne(
-    @Param('id') id: string,
-    @GetUser('userId') userId: string,
-  ) {
+  findOne(@Param('id') id: string, @GetUser('userId') userId: string) {
     return this.companyService.findOne(id, userId);
   }
 
@@ -118,20 +124,14 @@ export class CompanyController {
   // ================= DELETE =================
   @ApiOperation({ summary: 'Delete a company' })
   @Delete(':id')
-  remove(
-    @Param('id') id: string,
-    @GetUser('userId') userId: string,
-  ) {
+  remove(@Param('id') id: string, @GetUser('userId') userId: string) {
     return this.companyService.remove(id, userId);
   }
 
   // ================= SWITCH COMPANY =================
   @ApiOperation({ summary: 'Switch current active company' })
   @Put('switch/:id')
-  switchCompany(
-    @Param('id') id: string,
-    @GetUser('userId') userId: string,
-  ) {
+  switchCompany(@Param('id') id: string, @GetUser('userId') userId: string) {
     return this.companyService.switchCompany(id, userId);
   }
 }
