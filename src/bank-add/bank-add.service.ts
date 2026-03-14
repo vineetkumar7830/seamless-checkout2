@@ -24,8 +24,18 @@ export class BankAddService {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { companyId: _, ...bankData } = data as any;
 
+      // If signatureUrl is missing, try to inherit from company
+      let finalSignatureUrl = bankData.signatureUrl;
+      if (!finalSignatureUrl) {
+        const company = await this.bankModel.db.model('Company').findById(companyId);
+        if (company && (company as any).signatureUrl) {
+          finalSignatureUrl = (company as any).signatureUrl;
+        }
+      }
+
       const record = await this.bankModel.create({
         ...bankData,
+        signatureUrl: finalSignatureUrl,
         companyId: new Types.ObjectId(companyId),
       });
 
@@ -46,9 +56,17 @@ export class BankAddService {
       if (!companyId) {
         throw new CustomError(401, 'Company context missing. Please relogin.');
       }
-      const records = await this.bankModel.find({
+      const rawRecords = await this.bankModel.find({
         companyId: new Types.ObjectId(companyId),
-      });
+      }).lean();
+
+      // Ensure fields exist for DataTables
+      const records = rawRecords.map(record => ({
+        ...record,
+        routingNumber: record.routingNumber ?? null,
+        transitNumber: record.transitNumber ?? null,
+        financialInstitutionNo: record.financialInstitutionNo ?? null,
+      }));
 
       return new CustomResponse(
         200,
@@ -70,16 +88,24 @@ export class BankAddService {
       const record = await this.bankModel.findOne({
         _id: new Types.ObjectId(id),
         companyId: new Types.ObjectId(companyId),
-      });
+      }).lean();
 
       if (!record) {
         throw new CustomError(404, 'Record not found');
       }
 
+      // Ensure fields exist for DataTables
+      const sanitizedRecord = {
+        ...record,
+        routingNumber: record.routingNumber ?? null,
+        transitNumber: record.transitNumber ?? null,
+        financialInstitutionNo: record.financialInstitutionNo ?? null,
+      };
+
       return new CustomResponse(
         200,
         'Bank record fetched successfully',
-        record,
+        sanitizedRecord,
       );
     } catch (error) {
       throwException(error);

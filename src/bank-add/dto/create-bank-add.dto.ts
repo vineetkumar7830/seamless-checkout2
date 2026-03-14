@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, Matches, ValidateIf } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, Matches, ValidateIf } from 'class-validator';
 
 export class CreateBankDto {
 
@@ -94,5 +94,6 @@ export class CreateBankDto {
   checkNumber?: string;
 
   @IsOptional()
-  fractionalNumber?: string;
+  @IsString()
+  signatureUrl?: string;
 }

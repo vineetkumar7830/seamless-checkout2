@@ -43,7 +43,7 @@ export class BankAddController {
 
     const signatureUrl = file
       ? `${baseUrl}/uploads/signature/${file.filename}`
-      : null;
+      : dto.signatureUrl || null;
 
     return this.service.create({
       ...dto,
@@ -86,7 +86,7 @@ export class BankAddController {
 
     const signatureUrl = file
       ? `${baseUrl}/uploads/signature/${file.filename}`
-      : undefined;
+      : dto.signatureUrl;
 
     return this.service.update(id, {
       ...dto,
