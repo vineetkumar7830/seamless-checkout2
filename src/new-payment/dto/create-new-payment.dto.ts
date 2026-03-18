@@ -5,6 +5,7 @@ import {
   IsBoolean,
   ValidateNested
 } from "class-validator";
+
 import { Type } from "class-transformer";
 
 /* -----------------------------
@@ -61,7 +62,6 @@ export class CreatePaymentDto {
   @IsString()
   checkNumber: string;
 
-  // Payee id frontend se aayegi
   @IsString()
   payeeId: string;
 
@@ -81,5 +81,46 @@ export class CreatePaymentDto {
   @ValidateNested()
   @Type(() => ProcessWithoutDto)
   processWithout: ProcessWithoutDto;
+
+}
+
+/* -----------------------------
+   Note DTO (FIXED)
+------------------------------ */
+
+export class NoteDto {
+
+  @IsOptional()
+  @IsString()
+  note: string;
+
+}
+
+/* -----------------------------
+   Remittance DTO
+------------------------------ */
+
+export class RemittanceDto {
+
+  @IsString()
+  invoiceDate: string;
+
+  @IsString()
+  invoiceNumber: string;
+
+  @IsString()
+  description: string;
+
+  @IsNumber()
+  gross: number;
+
+  @IsNumber()
+  discount: number;
+
+  @IsNumber()
+  net: number;
+
+  @IsNumber()
+  thisPayment: number;
 
 }

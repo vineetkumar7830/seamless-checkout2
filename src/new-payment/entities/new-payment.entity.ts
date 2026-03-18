@@ -9,6 +9,10 @@ export class Payment {
   @Prop({ required: true })
   userId: string;
 
+  // 🔥 SaaS ADD
+  @Prop({ required: true, index: true })
+  companyId: string;
+
   @Prop({ enum: ['card','wallet','bank'], required: true })
   payFrom: string;
 
@@ -17,7 +21,6 @@ export class Payment {
 
   @Prop({ required: true })
   payee: string;
-
 
   @Prop({ default: 0 })
   amount: number;
@@ -75,14 +78,13 @@ export class Payment {
       thisPayment:Number
     }
   ])
-  remittance:any[]
+  remittance:any[];
 
   @Prop([String])
-  attachments:string[]
+  attachments:string[];
 
   @Prop([String])
-  notes:string[]
-
+  notes:string[];
 }
 
 export const PaymentSchema = SchemaFactory.createForClass(Payment);

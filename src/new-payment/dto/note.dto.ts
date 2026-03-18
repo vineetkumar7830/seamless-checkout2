@@ -1,5 +1,8 @@
-export class NoteDto{
+import { IsString } from "class-validator";
 
- note:string
+export class NoteDto {
+
+  @IsString()
+  note: string;
 
 }

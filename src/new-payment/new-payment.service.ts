@@ -1,169 +1,308 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Payment } from './entities/new-payment.entity';
 import { Payee } from '../payee/entities/payee.entity';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import * as nodemailer from 'nodemailer';
+
+import { throwException } from 'src/util/util/errorhandling';
+import CustomError from 'src/provider/customer-error.service';
+import CustomResponse from 'src/provider/custom-response.service';
 
 @Injectable()
 export class NewPaymentService {
 
-constructor(
-@InjectModel(Payment.name)
-private paymentModel: Model<Payment>,
+  constructor(
+    @InjectModel(Payment.name)
+    private paymentModel: Model<Payment>,
 
-@InjectModel(Payee.name)
-private payeeModel: Model<Payee>
-){}
+    @InjectModel(Payee.name)
+    private payeeModel: Model<Payee>
+  ) {}
 
-async create(userId: string, companyId: string, data: any){
+  // ✅ CREATE
+  async create(user: any, data: any): Promise<CustomResponse> {
+    try {
 
-if(!userId){
-throw new BadRequestException("UserId is required")
-}
+      if (!user?.userId || !user?.companyId) {
+        throw new CustomError(400, "Invalid user token");
+      }
 
-const payment = new this.paymentModel({
-...data,
-userId,
-companyId
-})
+      const payment = await this.paymentModel.create({
+        ...data,
+        userId: user.userId,
+        companyId: user.companyId
+      });
 
-return payment.save()
+      return new CustomResponse(
+        201,
+        "Payment created successfully",
+        payment
+      );
 
-}
+    } catch (error) {
+      throwException(error);
+      throw error;
+    }
+  }
 
-async saveAndNew(userId: string, companyId: string, data: any){
+  // ✅ SAVE & NEW
+  async saveAndNew(user: any, data: any): Promise<CustomResponse> {
+    try {
 
-if(!userId){
-throw new BadRequestException("UserId is required")
-}
+      const payment = await this.paymentModel.create({
+        ...data,
+        userId: user.userId,
+        companyId: user.companyId
+      });
 
-const payment = new this.paymentModel({
-...data,
-userId,
-companyId
-})
+      return new CustomResponse(
+        201,
+        "Saved successfully",
+        payment
+      );
 
-await payment.save()
+    } catch (error) {
+      throwException(error);
+      throw error;
+    }
+  }
 
-return {
-message: "Saved successfully"
-}
+  // ✅ GET ALL (🔥 company filter)
+  async getAllPayments(user: any): Promise<CustomResponse> {
+    try {
 
-}
+      const payments = await this.paymentModel
+        .find({ companyId: user.companyId })
+        .sort({ createdAt: -1 });
 
-async addRemittance(paymentId: string, data: any){
+      return new CustomResponse(
+        200,
+        "Payments fetched successfully",
+        payments
+      );
 
-return this.paymentModel.findByIdAndUpdate(
-paymentId,
-{ $push: { remittance: data } },
-{ new: true }
-)
+    } catch (error) {
+      throwException(error);
+      throw error;
+    }
+  }
 
-}
+  // ✅ GET ONE (🔥 secure)
+  async getPayment(paymentId: string, user: any): Promise<CustomResponse> {
+    try {
 
-async uploadAttachment(paymentId: string, file: any){
+      const payment = await this.paymentModel.findOne({
+        _id: paymentId,
+        companyId: user.companyId
+      });
 
-if(!file){
-throw new BadRequestException("File not uploaded")
-}
+      if (!payment) {
+        throw new CustomError(404, "Payment not found");
+      }
 
-return this.paymentModel.findByIdAndUpdate(
-paymentId,
-{ $push: { attachments: file.filename } },
-{ new: true }
-)
+      return new CustomResponse(
+        200,
+        "Payment fetched successfully",
+        payment
+      );
 
-}
+    } catch (error) {
+      throwException(error);
+      throw error;
+    }
+  }
 
-async addNote(paymentId: string, note: string){
+  // ✅ ADD REMITTANCE
+  async addRemittance(paymentId: string, data: any, user: any): Promise<CustomResponse> {
+    try {
 
-if(!note){
-throw new BadRequestException("Note is required")
-}
+      const updated = await this.paymentModel.findOneAndUpdate(
+        { _id: paymentId, companyId: user.companyId },
+        { $push: { remittance: data } },
+        { new: true }
+      );
 
-return this.paymentModel.findByIdAndUpdate(
-paymentId,
-{ $push: { notes: note } },
-{ new: true }
-)
+      if (!updated) {
+        throw new CustomError(404, "Payment not found");
+      }
 
-}
+      return new CustomResponse(
+        200,
+        "Remittance added successfully",
+        updated
+      );
 
-async sendMail(paymentId: string){
+    } catch (error) {
+      throwException(error);
+      throw error;
+    }
+  }
 
-const payment = await this.paymentModel.findById(paymentId)
+  // ✅ UPLOAD ATTACHMENT
+  async uploadAttachment(paymentId: string, file: any, user: any): Promise<CustomResponse> {
+    try {
 
-if(!payment){
-throw new NotFoundException("Payment not found")
-}
+      if (!file) {
+        throw new CustomError(400, "File not uploaded");
+      }
 
-const payee = await this.payeeModel.findById(payment.payeeId)
+      const updated = await this.paymentModel.findOneAndUpdate(
+        { _id: paymentId, companyId: user.companyId },
+        { $push: { attachments: file.filename } },
+        { new: true }
+      );
 
-if(!payee){
-throw new NotFoundException("Payee not found")
-}
+      if (!updated) {
+        throw new CustomError(404, "Payment not found");
+      }
 
-const transporter = nodemailer.createTransport({
-service: 'gmail',
-auth: {
-user: process.env.EMAIL,
-pass: process.env.EMAIL_PASS
-}
-})
+      return new CustomResponse(
+        200,
+        "Attachment uploaded successfully",
+        updated
+      );
 
-await transporter.sendMail({
-to: payee.email,
-subject: "Payment Check",
-text: `You received payment of $${payment.amount}`
-})
+    } catch (error) {
+      throwException(error);
+      throw error;
+    }
+  }
 
-return {
-message: "Mail Sent Successfully"
-}
+  // ✅ ADD NOTE
+  async addNote(paymentId: string, note: string, user: any): Promise<CustomResponse> {
+    try {
 
-}
+      if (!note) {
+        throw new CustomError(400, "Note is required");
+      }
 
-async printCheck(paymentId: string){
+      const updated = await this.paymentModel.findOneAndUpdate(
+        { _id: paymentId, companyId: user.companyId },
+        { $push: { notes: note } },
+        { new: true }
+      );
 
-const payment = await this.paymentModel.findById(paymentId)
+      if (!updated) {
+        throw new CustomError(404, "Payment not found");
+      }
 
-if(!payment){
-throw new NotFoundException("Payment not found")
-}
+      return new CustomResponse(
+        200,
+        "Note added successfully",
+        updated
+      );
 
-return {
-message: "Check Printed Successfully",
-payment
-}
+    } catch (error) {
+      throwException(error);
+      throw error;
+    }
+  }
 
-}
+  // ✅ SEND MAIL (🔥 secure)
+  async sendMail(paymentId: string, user: any): Promise<CustomResponse> {
+    try {
 
-async sendACH(paymentId: string){
+      const payment = await this.paymentModel.findOne({
+        _id: paymentId,
+        companyId: user.companyId
+      });
 
-const payment = await this.paymentModel.findById(paymentId)
+      if (!payment) {
+        throw new CustomError(404, "Payment not found");
+      }
 
-if(!payment){
-throw new NotFoundException("Payment not found")
-}
+      let payee;
 
-return {
-message: "ACH Payment Sent",
-payment
-}
+      if (Types.ObjectId.isValid(payment.payeeId)) {
+        payee = await this.payeeModel.findById(payment.payeeId);
+      }
 
-}
+      if (!payee) {
+        payee = await this.payeeModel.findOne({ payeeId: payment.payeeId });
+      }
 
-async getPayment(paymentId: string){
+      if (!payee) {
+        payee = await this.payeeModel.findOne({ name: payment.payee });
+      }
 
-const payment = await this.paymentModel.findById(paymentId)
+      if (!payee) {
+        throw new CustomError(404, "Payee not found in database");
+      }
 
-if(!payment){
-throw new NotFoundException("Payment not found")
-}
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.EMAIL,
+          pass: process.env.EMAIL_PASS
+        }
+      });
 
-return payment
+      await transporter.sendMail({
+        to: payee.email,
+        subject: "Payment Check",
+        text: `You received payment of $${payment.amount}`
+      });
 
-}
+      return new CustomResponse(
+        200,
+        "Mail sent successfully",
+        null
+      );
 
-}
+    } catch (error) {
+      throwException(error);
+      throw error;
+    }
+  }
+
+  // ✅ PRINT CHECK
+  async printCheck(paymentId: string, user: any): Promise<CustomResponse> {
+    try {
+
+      const payment = await this.paymentModel.findOne({
+        _id: paymentId,
+        companyId: user.companyId
+      });
+
+      if (!payment) {
+        throw new CustomError(404, "Payment not found");
+      }
+
+      return new CustomResponse(
+        200,
+        "Check printed successfully",
+        payment
+      );
+
+    } catch (error) {
+      throwException(error);
+      throw error;
+    }
+  }
+
+  // ✅ SEND ACH
+  async sendACH(paymentId: string, user: any): Promise<CustomResponse> {
+    try {
+
+      const payment = await this.paymentModel.findOne({
+        _id: paymentId,
+        companyId: user.companyId
+      });
+
+      if (!payment) {
+        throw new CustomError(404, "Payment not found");
+      }
+
+      return new CustomResponse(
+        200,
+        "ACH payment sent",
+        payment
+      );
+
+    } catch (error) {
+      throwException(error);
+      throw error;
+    }
+  }
+} 

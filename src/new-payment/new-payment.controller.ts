@@ -1,109 +1,97 @@
 import {
-Controller,
-Post,
-Get,
-Body,
-Req,
-Param,
-UploadedFile,
-UseInterceptors,
-UseGuards,
-BadRequestException
+  Controller,
+  Post,
+  Get,
+  Body,
+  Req,
+  Param,
+  UploadedFile,
+  UseInterceptors,
+  UseGuards,
+  BadRequestException
 } from '@nestjs/common';
 
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
+import type { Request } from 'express';
 
 import { NewPaymentService } from './new-payment.service';
 import { CreatePaymentDto } from './dto/create-new-payment.dto';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('new-payment')
 export class NewPaymentController {
 
-constructor(private service: NewPaymentService){}
+  constructor(private service: NewPaymentService){}
 
-@UseGuards(AuthGuard('jwt'))
-@Post('save')
-create(@Req() req, @Body() dto: CreatePaymentDto){
+  @Post('save')
+  create(@Req() req: Request, @Body() dto: CreatePaymentDto){
+    const user = req['user'];
 
-// ✅ JWT strategy se userId aa raha hai
-const userId = req.user?.userId
-const companyId = req.user?.companyId
+    if(!user?.userId || !user?.companyId){
+      throw new BadRequestException("Invalid token");
+    }
 
-if(!userId){
-throw new BadRequestException("User not found in token")
-}
+    return this.service.create(user, dto);
+  }
 
-return this.service.create(userId, companyId, dto)
+  @Post('save-new')
+  saveNew(@Req() req: Request, @Body() dto: CreatePaymentDto){
+    const user = req['user'];
 
-}
+    if(!user?.userId || !user?.companyId){
+      throw new BadRequestException("Invalid token");
+    }
 
-@UseGuards(AuthGuard('jwt'))
-@Post('save-new')
-saveNew(@Req() req,@Body() dto: CreatePaymentDto){
+    return this.service.saveAndNew(user, dto);
+  }
 
-const userId = req.user?.userId
-const companyId = req.user?.companyId
+  @Get()
+  getAll(@Req() req: Request){
+    const user = req['user'];
+    return this.service.getAllPayments(user);
+  }
 
-if(!userId){
-throw new BadRequestException("User not found in token")
-}
+  @Get(':id')
+  getPayment(@Req() req: Request, @Param('id') id: string){
+    const user = req['user'];
+    return this.service.getPayment(id, user);
+  }
 
-return this.service.saveAndNew(userId, companyId, dto)
+  @Post('remittance/:id')
+  addRemittance(@Req() req: Request, @Param('id') id: string, @Body() body){
+    const user = req['user'];
+    return this.service.addRemittance(id, body, user);
+  }
 
-}
+  @Post('upload/:id')
+  @UseInterceptors(FileInterceptor('file'))
+  uploadFile(@Req() req: Request, @Param('id') id: string, @UploadedFile() file){
+    const user = req['user'];
+    return this.service.uploadAttachment(id, file, user);
+  }
 
-@Post('remittance/:id')
-addRemittance(@Param('id') id: string,@Body() body){
+  @Post('add-note/:id')
+  addNote(@Req() req: Request, @Param('id') id: string, @Body() body: any){
+    const user = req['user'];
+    return this.service.addNote(id, body?.note, user);
+  }
 
-return this.service.addRemittance(id,body)
+  @Post('mail-check/:id')
+  sendMail(@Req() req: Request, @Param('id') id: string){
+    const user = req['user'];
+    return this.service.sendMail(id, user);
+  }
 
-}
+  @Post('print/:id')
+  printCheck(@Req() req: Request, @Param('id') id: string){
+    const user = req['user'];
+    return this.service.printCheck(id, user);
+  }
 
-@Post('upload/:id')
-@UseInterceptors(FileInterceptor('file'))
-uploadFile(
-@Param('id') id: string,
-@UploadedFile() file
-){
-
-return this.service.uploadAttachment(id,file)
-
-}
-
-@Post('add-note/:id')
-addNote(@Param('id') id: string,@Body() body){
-
-return this.service.addNote(id,body.note)
-
-}
-
-@Post('mail-check/:id')
-sendMail(@Param('id') id: string){
-
-return this.service.sendMail(id)
-
-}
-
-@Post('print/:id')
-printCheck(@Param('id') id: string){
-
-return this.service.printCheck(id)
-
-}
-
-@Post('send-ach/:id')
-sendAch(@Param('id') id: string){
-
-return this.service.sendACH(id)
-
-}
-
-@Get(':id')
-getPayment(@Param('id') id: string){
-
-return this.service.getPayment(id)
-
-}
-
+  @Post('send-ach/:id')
+  sendAch(@Req() req: Request, @Param('id') id: string){
+    const user = req['user'];
+    return this.service.sendACH(id, user);
+  }
 }

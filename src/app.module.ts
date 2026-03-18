@@ -62,6 +62,7 @@ import { RequestCompanyModule } from './request-company/request-company.module';
 import { BlankChecksModule } from './blank-checks/blank-checks.module';
 import { AddNewBankModule } from './add-new-bank/add-new-bank.module';
 import { NewPaymentModule } from './new-payment/new-payment.module';
+import { PayFromModule } from './payfronm/payfronm.module';
 
 @Module({
   imports: [
@@ -133,7 +134,8 @@ import { NewPaymentModule } from './new-payment/new-payment.module';
     RequestCompanyModule,
     BlankChecksModule,
     AddNewBankModule,
-    NewPaymentModule
+    NewPaymentModule,
+    PayFromModule
   ],
 
   controllers: [AppController],
