@@ -121,7 +121,6 @@ export class UserService {
     }
   }
 
-  // DELETE USER
   async remove(id: string, companyId: string) {
     try {
       if (!Types.ObjectId.isValid(id)) {
